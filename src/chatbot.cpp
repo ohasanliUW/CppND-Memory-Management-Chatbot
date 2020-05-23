@@ -68,7 +68,7 @@ ChatBot::ChatBot(ChatBot &&other)
     other._currentNode = nullptr;
     other._rootNode = nullptr;
     other._chatLogic = nullptr;
-    other._image = nullptr;
+    other._image = NULL;
 }
 
 ChatBot& ChatBot::operator=(const ChatBot &other)
@@ -95,7 +95,7 @@ ChatBot& ChatBot::operator=(ChatBot &&other)
     other._currentNode = nullptr;
     other._rootNode = nullptr;
     other._chatLogic = nullptr;
-    other._image = nullptr;
+    other._image = NULL;
     return *this;
 }
 
