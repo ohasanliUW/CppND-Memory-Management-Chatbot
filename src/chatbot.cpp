@@ -52,11 +52,11 @@ ChatBot::ChatBot(const ChatBot &other)
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
     _chatLogic = other._chatLogic;
-    _image = other._image;
+    _image = new wxBitmap(*other._image);
 
 }
 
-ChatBot::ChatBot(const ChatBot &&other)
+ChatBot::ChatBot(ChatBot &&other)
 {
     std::cout << "ChatBot move constructor" << std::endl;
 
@@ -64,6 +64,11 @@ ChatBot::ChatBot(const ChatBot &&other)
     _rootNode = std::move(other._rootNode);
     _chatLogic = std::move(other._chatLogic);
     _image = std::move(other._image);
+
+    other._currentNode = nullptr;
+    other._rootNode = nullptr;
+    other._chatLogic = nullptr;
+    other._image = nullptr;
 }
 
 ChatBot& ChatBot::operator=(const ChatBot &other)
@@ -73,12 +78,12 @@ ChatBot& ChatBot::operator=(const ChatBot &other)
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
     _chatLogic = other._chatLogic;
-    _image = other._image;
+    _image = new wxBitmap(*other._image);
 
     return *this;
 }
 
-ChatBot& ChatBot::operator=(const ChatBot &&other)
+ChatBot& ChatBot::operator=(ChatBot &&other)
 {
     std::cout << "ChatBot move assignment operator" << std::endl;
 
@@ -87,6 +92,10 @@ ChatBot& ChatBot::operator=(const ChatBot &&other)
     _chatLogic = std::move(other._chatLogic);
     _image = std::move(other._image);
 
+    other._currentNode = nullptr;
+    other._rootNode = nullptr;
+    other._chatLogic = nullptr;
+    other._image = nullptr;
     return *this;
 }
 
@@ -137,6 +146,9 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
+
+    // update chatbox for chat logic
+    _chatLogic->SetChatbotHandle(this);
 
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);
